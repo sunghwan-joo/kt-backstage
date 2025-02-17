@@ -72,10 +72,10 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           pluralTitle="My Groups"
           icon={GroupIcon}
         />
+		<SidebarItem icon={PollIcon} to="open-dora" text="OpenDORA" />
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
-		<SidebarItem icon={ExtensionIcon} to="open-dora" text="OpenDORA" />
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>
