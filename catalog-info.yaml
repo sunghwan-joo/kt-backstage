@@ -3,6 +3,13 @@ kind: System
 metadata:
   name: backstage-core-system
   description: Core system for developer platform
+  links:
+      - url: https://github.com/sunghwan-joo/kt-backstage
+        title: GitHub Repository
+        icon: github
+      - url: https://backstage.io/docs
+        title: Backstage Documentation
+        icon: docs
 spec:
   owner: platform-team
   domain: platform-engineering
