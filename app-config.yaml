@@ -43,6 +43,12 @@ integrations:
     #   apiBaseUrl: https://ghe.example.net/api/v3
     #   token: ${GHE_TOKEN}
 
+scaffolder:
+  github:
+    token: ${GITHUB_TOKEN}
+    visibility: public
+  allowedHosts: ['github.com']
+  
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
