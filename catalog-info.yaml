@@ -1,20 +1,12 @@
+# catalog-info.yaml
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
   name: backstage-core-system
   description: Core system for developer platform
 spec:
-  owner: platform-team
-  domain: platform-engineering
-
----
-apiVersion: backstage.io/v1alpha1
-kind: Domain
-metadata:
-  name: platform-engineering
-  description: Platform Engineering Domain
-spec:
   owner: group:default/platform-team
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
@@ -26,19 +18,10 @@ spec:
   profile:
     displayName: Platform Engineering Team
     email: platform@example.com
-  members: 
+  members:
     - user:guest
-  children: []  # 비어있는 배열로 추가
----
-# 기존 System 정의
-apiVersion: backstage.io/v1alpha1
-kind: System
-metadata:
-  name: backstage-core-system
-  description: Core system for developer platform
-spec:
-  owner: group:default/platform-team
-  domain: platform-engineering
+  children: []
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -54,11 +37,8 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: user:guest
+  owner: group:default/platform-team
   system: backstage-core-system
-  dependsOn:
-    - resource:default/postgres-db
-    - component:search-service
 
 ---
 apiVersion: backstage.io/v1alpha1
@@ -75,10 +55,8 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: user:guest
+  owner: group:default/platform-team
   system: backstage-core-system
-  dependsOn:
-    - resource:default/elasticsearch
 
 ---
 apiVersion: backstage.io/v1alpha1
@@ -95,11 +73,8 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: user:guest
+  owner: group:default/platform-team
   system: backstage-core-system
-  dependsOn:
-    - resource:default/s3-storage
-    - component:catalog-service
 
 ---
 apiVersion: backstage.io/v1alpha1
@@ -116,40 +91,5 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: user:guest
-  system: backstage-core-system
-  dependsOn:
-    - component:catalog-service
-
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
-  name: postgres-db
-  description: PostgreSQL Database for Catalog Service
-spec:
-  type: database
-  owner: user:guest
-  system: backstage-core-system
-
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
-  name: elasticsearch
-  description: Elasticsearch for Search Service
-spec:
-  type: search-engine
-  owner: user:guest
-  system: backstage-core-system
-
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
-  name: s3-storage
-  description: S3 Storage for TechDocs
-spec:
-  type: storage
-  owner: user:guest
+  owner: group:default/platform-team
   system: backstage-core-system
