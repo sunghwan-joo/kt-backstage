@@ -142,12 +142,3 @@ metadata:
 spec:
   targets:
     - ./apis/core-api.yaml
----
-apiVersion: backstage.io/v1alpha1
-kind: Location
-metadata:
-  name: github-actions-templates
-  description: Collection of GitHub Actions templates
-spec:
-  targets:
-    - ./templates/github-actions-ci.yaml

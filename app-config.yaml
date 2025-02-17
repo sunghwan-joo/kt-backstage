@@ -105,12 +105,6 @@ catalog:
       rules:
         - allow: [Component, System, API, Resource, Location, Group]
 
-# 템플릿 전용 위치
-    - type: url
-      target: https://github.com/sunghwan-joo/kt-backstage/blob/main/templates
-      rules:
-        - allow: [Template]
-
 
     ## Uncomment these lines to add more example data
     # - type: url
