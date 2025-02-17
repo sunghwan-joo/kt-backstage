@@ -1,0 +1,7 @@
+# apis/mkdocs.yml
+site_name: 'Backstage Core API Documentation'
+nav:
+  - Home: index.md
+  - API Reference: reference.md
+plugins:
+  - techdocs-core

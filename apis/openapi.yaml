@@ -1,0 +1,124 @@
+# apis/openapi.yaml
+openapi: 3.0.0
+info:
+  title: Backstage Core API
+  version: 1.0.0
+  description: Core APIs for Backstage platform
+paths:
+  /api/catalog/entities:
+    get:
+      summary: Get all entities
+      operationId: getAllEntities
+      tags:
+        - Catalog
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: string
+          description: Filter string for entities
+      responses:
+        '200':
+          description: List of entities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Entity'
+
+  /api/search/query:
+    post:
+      summary: Search entities
+      operationId: searchEntities
+      tags:
+        - Search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                term:
+                  type: string
+                filters:
+                  type: object
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+
+  /api/techdocs/{namespace}/{kind}/{name}:
+    get:
+      summary: Get TechDocs content
+      operationId: getTechDocsContent
+      tags:
+        - TechDocs
+      parameters:
+        - name: namespace
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: kind
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TechDocs content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechDocsContent'
+
+components:
+  schemas:
+    Entity:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            name:
+              type: string
+            namespace:
+              type: string
+            description:
+              type: string
+        spec:
+          type: object
+        relations:
+          type: array
+          items:
+            type: object
+
+    SearchResult:
+      type: object
+      properties:
+        type:
+          type: string
+        document:
+          type: object
+        highlight:
+          type: object
+
+    TechDocsContent:
+      type: object
+      properties:
+        content:
+          type: string
+        metadata:
+          type: object
