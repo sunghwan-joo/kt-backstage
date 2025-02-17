@@ -10,6 +10,19 @@ import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
 
+// 카탈로그 플러그인 설정
+backend.add(async (env) => {
+  const builder = await CatalogBuilder.create(env);
+  
+  // Template 프로세서 추가
+  builder.addProcessor(new ScaffolderEntitiesProcessor());
+  
+  const { processingEngine, router } = await builder.build();
+  await processingEngine.start();
+  
+  return router;
+});
+
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend'));
