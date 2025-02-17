@@ -121,3 +121,13 @@ spec:
   type: storage
   owner: user:guest
   system: backstage-core-system
+  
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: backstage-core-apis
+  description: Backstage Core API Definitions
+spec:
+  targets:
+    - ./apis/core-api.yaml
