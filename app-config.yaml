@@ -82,7 +82,7 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location, Group, Template]
+    - allow: [Component, System, API, Resource, Location, Group]
   locations:
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
@@ -103,7 +103,14 @@ catalog:
     - type: url
       target: https://github.com/sunghwan-joo/kt-backstage/blob/main/catalog-info.yaml
       rules:
-        - allow: [Component, System, API, Resource, Location, Group, Template]
+        - allow: [Component, System, API, Resource, Location, Group]
+
+# 템플릿 전용 위치
+    - type: url
+      target: https://github.com/sunghwan-joo/kt-backstage/blob/main/templates
+      rules:
+        - allow: [Template]
+
 
     ## Uncomment these lines to add more example data
     # - type: url
