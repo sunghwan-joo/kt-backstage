@@ -1,0 +1,115 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: github-actions-ci-template
+  title: GitHub Actions CI Template
+  description: Create a GitHub Actions CI workflow for your project
+  tags:
+    - ci
+    - github
+    - actions
+spec:
+  owner: user:guest
+  type: service
+  
+  parameters:
+    - title: Basic Information
+      required:
+        - component_id
+        - description
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:autofocus: true
+          pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
+        description:
+          title: Description
+          type: string
+          description: Description of the component
+    
+    - title: CI Configuration
+      required:
+        - node_version
+      properties:
+        node_version:
+          title: Node.js Version
+          type: string
+          description: Node.js version to use
+          default: '16.x'
+          enum:
+            - '14.x'
+            - '16.x'
+            - '18.x'
+
+  steps:
+    - id: template
+      name: Create CI Workflow
+      action: fs:write
+      input:
+        path: ./.github/workflows/ci.yml
+        content: |
+          name: CI
+          on:
+            push:
+              branches: [ main ]
+            pull_request:
+              branches: [ main ]
+          
+          jobs:
+            build:
+              runs-on: ubuntu-latest
+              
+              steps:
+                - uses: actions/checkout@v3
+                
+                - name: Setup Node.js ${{ parameters.node_version }}
+                  uses: actions/setup-node@v3
+                  with:
+                    node-version: ${{ parameters.node_version }}
+                    cache: 'yarn'
+                
+                - name: Install dependencies
+                  run: yarn install --frozen-lockfile
+                
+                - name: Lint
+                  run: yarn lint
+                
+                - name: Build
+                  run: yarn build
+                
+                - name: Test
+                  run: yarn test
+
+    - id: publish
+      name: Create Catalog Info
+      action: catalog:write
+      input:
+        entity:
+          apiVersion: backstage.io/v1alpha1
+          kind: Component
+          metadata:
+            name: ${{ parameters.component_id }}
+            description: ${{ parameters.description }}
+            annotations:
+              github.com/project-slug: ${{ parameters.destination.owner + "/" + parameters.destination.repo }}
+          spec:
+            type: service
+            lifecycle: experimental
+            owner: user:guest
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.publish.output.entityRef }}
