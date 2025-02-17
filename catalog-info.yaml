@@ -1,4 +1,3 @@
-# catalog-info.yaml
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
@@ -19,11 +18,11 @@ metadata:
     - service
   annotations:
     backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: your-org/catalog-service
+    github.com/project-slug: sunghwan-joo/kt-backstage
 spec:
   type: service
   lifecycle: production
-  owner: platform-team
+  owner: user:guest
   system: backstage-core-system
   dependsOn:
     - resource:default/postgres-db
@@ -40,11 +39,11 @@ metadata:
     - service
   annotations:
     backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: your-org/search-service
+    github.com/project-slug: sunghwan-joo/kt-backstage
 spec:
   type: service
   lifecycle: production
-  owner: platform-team
+  owner: user:guest
   system: backstage-core-system
   dependsOn:
     - resource:default/elasticsearch
@@ -60,11 +59,11 @@ metadata:
     - documentation
   annotations:
     backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: your-org/techdocs-service
+    github.com/project-slug: sunghwan-joo/kt-backstage
 spec:
   type: service
   lifecycle: production
-  owner: platform-team
+  owner: user:guest
   system: backstage-core-system
   dependsOn:
     - resource:default/s3-storage
@@ -81,11 +80,11 @@ metadata:
     - templates
   annotations:
     backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: your-org/scaffolder-templates
+    github.com/project-slug: sunghwan-joo/kt-backstage
 spec:
   type: service
   lifecycle: production
-  owner: platform-team
+  owner: user:guest
   system: backstage-core-system
   dependsOn:
     - component:catalog-service
@@ -98,7 +97,7 @@ metadata:
   description: PostgreSQL Database for Catalog Service
 spec:
   type: database
-  owner: platform-team
+  owner: user:guest
   system: backstage-core-system
 
 ---
@@ -109,7 +108,7 @@ metadata:
   description: Elasticsearch for Search Service
 spec:
   type: search-engine
-  owner: platform-team
+  owner: user:guest
   system: backstage-core-system
 
 ---
@@ -120,19 +119,5 @@ metadata:
   description: S3 Storage for TechDocs
 spec:
   type: storage
-  owner: platform-team
+  owner: user:guest
   system: backstage-core-system
-
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: platform-team
-  description: Platform Engineering Team
-spec:
-  type: team
-  profile:
-    displayName: Platform Engineering
-    email: platform@example.com
-  parent: default-org
-  children: []
