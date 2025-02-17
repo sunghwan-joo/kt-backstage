@@ -135,18 +135,3 @@ metadata:
 spec:
   targets:
     - ./apis/core-api.yaml
----
-apiVersion: backstage.io/v1alpha1
-kind: API
-metadata:
-  name: backstage-core-api
-  description: Backstage Core API Documentation
-  annotations:
-    backstage.io/techdocs-ref: dir:.
-spec:
-  type: openapi
-  lifecycle: production
-  owner: user:guest
-  system: backstage-core-system  # System 연결
-  definition:
-    $text: ./apis/openapi.yaml
