@@ -99,11 +99,6 @@ catalog:
       rules:
         - allow: [Template]
 
-    - type: url
-      target: 'https://github.com/poplar0713/nodejs-template/blob/main/template.yaml'
-      ruels:
-        - allow: [Template]
-
     # Local example organizational data
     - type: file
       target: ../../examples/org.yaml
