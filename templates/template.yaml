@@ -8,17 +8,10 @@ spec:
   owner: user:guest
   type: service
   parameters:
-    - title: Provide repository information
+    - title: Choose a location
       required:
-        - componentName
         - repoUrl
       properties:
-        componentName:
-          title: Component Name
-          type: string
-          description: Name of the component
-          pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
-          maxLength: 63
         repoUrl:
           title: Repository Location
           type: string
@@ -26,20 +19,18 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-  
+
   steps:
     - id: template
       name: Fetch Template
       action: fetch:template
       input:
         url: ./skeleton
-        targetPath: ./
         values:
-          name: ${{ parameters.componentName }}
-          repoName: ${{ parameters.repoUrl | parseRepoUrl }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
 
     - id: publish
-      name: Publish to GitHub
+      name: Publish
       action: publish:github
       input:
         allowedHosts: ['github.com']

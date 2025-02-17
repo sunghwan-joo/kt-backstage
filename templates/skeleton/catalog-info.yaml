@@ -1,9 +1,9 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: ${{ values.name }}
+  name: github-actions-example
   annotations:
-    github.com/project-slug: ${{ values.repoName.owner }}/${{ values.repoName.repo }}
+    github.com/project-slug: ${{ values.destination.owner }}/${{ values.destination.repo }}
 spec:
   type: service
   lifecycle: experimental
