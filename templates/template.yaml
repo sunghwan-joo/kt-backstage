@@ -1,33 +1,24 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: simple-github-actions-ci
-  title: Simple GitHub Actions CI
-  description: Creates a basic GitHub Actions CI workflow for your project
+  name: github-actions-ci
+  title: GitHub Actions CI Workflow
+  description: Creates a GitHub Actions CI workflow
 spec:
   owner: user:guest
   type: service
-
   parameters:
-    - title: Project Information
+    - title: Provide repository information
       required:
-        - name
-        - description
-      properties:
-        name:
-          title: Name
-          type: string
-          description: Project name
-          ui:autofocus: true
-        description:
-          title: Description
-          type: string
-          description: Project description
-    
-    - title: Repository Information
-      required:
+        - componentName
         - repoUrl
       properties:
+        componentName:
+          title: Component Name
+          type: string
+          description: Name of the component
+          pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
+          maxLength: 63
         repoUrl:
           title: Repository Location
           type: string
@@ -35,36 +26,36 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-
+  
   steps:
     - id: template
       name: Fetch Template
       action: fetch:template
       input:
         url: ./skeleton
+        targetPath: ./
         values:
-          name: ${{ parameters.name }}
-          description: ${{ parameters.description }}
+          name: ${{ parameters.componentName }}
+          repoName: ${{ parameters.repoUrl | parseRepoUrl }}
 
     - id: publish
       name: Publish to GitHub
       action: publish:github
       input:
         allowedHosts: ['github.com']
-        description: ${{ parameters.description }}
         repoUrl: ${{ parameters.repoUrl }}
 
     - id: register
       name: Register
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
         catalogInfoPath: '/catalog-info.yaml'
 
   output:
     links:
-      - title: GitHub Repository
-        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
       - title: Open in catalog
         icon: catalog
-        entityRef: ${{ steps['register'].output.entityRef }}
+        entityRef: ${{ steps.register.output.entityRef }}
