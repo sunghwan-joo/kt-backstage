@@ -133,3 +133,6 @@ kubernetes:
 permission:
   # setting this to `false` will disable permissions
   enabled: true
+  
+open-dora:
+  apiBaseUrl: http://localhost:10666
