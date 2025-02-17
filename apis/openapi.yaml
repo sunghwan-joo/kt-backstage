@@ -1,124 +1,187 @@
-# apis/openapi.yaml
 openapi: 3.0.0
 info:
-  title: Backstage Core API
-  version: 1.0.0
-  description: Core APIs for Backstage platform
+  title: "Backstage Core API"
+  version: "1.0.0"
+  description: "Core APIs for Backstage platform"
 paths:
   /api/catalog/entities:
     get:
-      summary: Get all entities
-      operationId: getAllEntities
+      summary: "Get all entities"
+      operationId: "getAllEntities"
       tags:
-        - Catalog
+        - "Catalog"
       parameters:
-        - name: filter
-          in: query
+        - name: "filter"
+          in: "query"
           schema:
-            type: string
-          description: Filter string for entities
+            type: "string"
+          description: "Filter string for entities"
       responses:
         '200':
-          description: List of entities
+          description: "List of entities"
           content:
             application/json:
               schema:
-                type: array
+                type: "array"
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: "#/components/schemas/Entity"
 
   /api/search/query:
     post:
-      summary: Search entities
-      operationId: searchEntities
+      summary: "Search entities"
+      operationId: "searchEntities"
       tags:
-        - Search
+        - "Search"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
+              type: "object"
               properties:
                 term:
-                  type: string
+                  type: "string"
+                  description: "Search term"
                 filters:
-                  type: object
+                  type: "object"
+                  additionalProperties:
+                    type: "string"
+                  description: "Search filters"
+                  example:
+                    kind: "Component"
+                    type: "service"
       responses:
         '200':
-          description: Search results
+          description: "Search results"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SearchResult'
+                $ref: "#/components/schemas/SearchResults"
 
-  /api/techdocs/{namespace}/{kind}/{name}:
+  /api/techdocs:
     get:
-      summary: Get TechDocs content
-      operationId: getTechDocsContent
+      summary: "Get TechDocs content"
+      operationId: "getTechDocsContent"
       tags:
-        - TechDocs
+        - "TechDocs"
       parameters:
-        - name: namespace
-          in: path
+        - name: "namespace"
+          in: "query"
           required: true
           schema:
-            type: string
-        - name: kind
-          in: path
+            type: "string"
+        - name: "kind"
+          in: "query"
           required: true
           schema:
-            type: string
-        - name: name
-          in: path
+            type: "string"
+        - name: "name"
+          in: "query"
           required: true
           schema:
-            type: string
+            type: "string"
       responses:
         '200':
-          description: TechDocs content
+          description: "TechDocs content"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TechDocsContent'
+                $ref: "#/components/schemas/TechDocsContent"
 
 components:
   schemas:
     Entity:
-      type: object
+      type: "object"
+      required:
+        - "metadata"
+        - "spec"
       properties:
         metadata:
-          type: object
+          type: "object"
+          required:
+            - "name"
           properties:
             name:
-              type: string
+              type: "string"
             namespace:
-              type: string
+              type: "string"
             description:
-              type: string
+              type: "string"
         spec:
-          type: object
+          type: "object"
+          required:
+            - "type"
+            - "owner"
+          properties:
+            type:
+              type: "string"
+            owner:
+              type: "string"
         relations:
-          type: array
+          type: "array"
           items:
-            type: object
+            type: "object"
+            required:
+              - "type"
+              - "targetRef"
+            properties:
+              type:
+                type: "string"
+              targetRef:
+                type: "string"
+
+    SearchResults:
+      type: "object"
+      required:
+        - "results"
+      properties:
+        results:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/SearchResult"
 
     SearchResult:
-      type: object
+      type: "object"
+      required:
+        - "type"
+        - "document"
       properties:
         type:
-          type: string
+          type: "string"
         document:
-          type: object
+          type: "object"
+          properties:
+            title:
+              type: "string"
+            text:
+              type: "string"
+            location:
+              type: "string"
         highlight:
-          type: object
+          type: "object"
+          properties:
+            title:
+              type: "array"
+              items:
+                type: "string"
+            text:
+              type: "array"
+              items:
+                type: "string"
 
     TechDocsContent:
-      type: object
+      type: "object"
+      required:
+        - "content"
       properties:
         content:
-          type: string
+          type: "string"
         metadata:
-          type: object
+          type: "object"
+          properties:
+            title:
+              type: "string"
+            description:
+              type: "string"
+            etag:
+              type: "string"
