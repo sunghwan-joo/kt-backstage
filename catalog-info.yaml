@@ -9,6 +9,38 @@ spec:
 
 ---
 apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: platform-engineering
+  description: Platform Engineering Domain
+spec:
+  owner: group:default/platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  description: Platform Engineering Team
+spec:
+  type: team
+  profile:
+    displayName: Platform Engineering Team
+    email: platform@example.com
+  members: 
+    - user:guest
+  children: []  # 비어있는 배열로 추가
+---
+# 기존 System 정의
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: backstage-core-system
+  description: Core system for developer platform
+spec:
+  owner: group:default/platform-team
+  domain: platform-engineering
+---
+apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: catalog-service
