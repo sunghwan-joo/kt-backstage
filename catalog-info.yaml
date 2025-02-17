@@ -1,13 +1,138 @@
+# catalog-info.yaml
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: backstage-core-system
+  description: Core system for developer platform
+spec:
+  owner: platform-team
+  domain: platform-engineering
+
+---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: kt-backstage
-  description: An example of a Backstage application.
-  # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
-  #   backstage.io/techdocs-ref: dir:.
+  name: catalog-service
+  description: Backstage Catalog Service Component
+  tags:
+    - core
+    - service
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: your-org/catalog-service
 spec:
-  type: website
-  owner: john@example.com
-  lifecycle: experimental
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: backstage-core-system
+  dependsOn:
+    - resource:default/postgres-db
+    - component:search-service
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: search-service
+  description: Backstage Search Service Component
+  tags:
+    - core
+    - service
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: your-org/search-service
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: backstage-core-system
+  dependsOn:
+    - resource:default/elasticsearch
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: techdocs-service
+  description: Backstage TechDocs Service Component
+  tags:
+    - core
+    - documentation
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: your-org/techdocs-service
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: backstage-core-system
+  dependsOn:
+    - resource:default/s3-storage
+    - component:catalog-service
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: scaffolder-templates
+  description: Software Templates Service
+  tags:
+    - core
+    - templates
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: your-org/scaffolder-templates
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: backstage-core-system
+  dependsOn:
+    - component:catalog-service
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: postgres-db
+  description: PostgreSQL Database for Catalog Service
+spec:
+  type: database
+  owner: platform-team
+  system: backstage-core-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: elasticsearch
+  description: Elasticsearch for Search Service
+spec:
+  type: search-engine
+  owner: platform-team
+  system: backstage-core-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: s3-storage
+  description: S3 Storage for TechDocs
+spec:
+  type: storage
+  owner: platform-team
+  system: backstage-core-system
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  description: Platform Engineering Team
+spec:
+  type: team
+  profile:
+    displayName: Platform Engineering
+    email: platform@example.com
+  parent: default-org
+  children: []
