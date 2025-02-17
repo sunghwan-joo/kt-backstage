@@ -27,6 +27,8 @@ spec:
   dependsOn:
     - resource:default/postgres-db
     - component:search-service
+  providesApis:
+    - backstage-core-api  # API 참조 추가
 
 ---
 apiVersion: backstage.io/v1alpha1
